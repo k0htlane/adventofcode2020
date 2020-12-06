@@ -1,0 +1,1 @@
+Note that these solutions are mostly written in the quickest way that I thought during the exercises, so they are unlikely the most elegant way of solvin the exercises. I have added some comments afterwards, and in some cases changed the code to be slightly more natural, you can see the original submission-time code from the Git history.
