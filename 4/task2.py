@@ -26,7 +26,7 @@ def valid_hgt(x):
 	return False
 
 def valid_hcl(x):
-	return None != re.match(r"#[0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z]", x)
+	return None != re.match(r"^#[0-9a-z]{6}$", x)
 
 def valid_ecl(x):
 	return x in "amb blu brn gry grn hzl oth"
@@ -41,12 +41,9 @@ def process(lines):
 			k, v = kv.split(":")
 			fields[k] = v
 	for k in ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]:
-		# valid = globals().get("valid_"+k, lambda x: True)
-		valid = globals().get("valid_"+k, None)
+		valid = globals().get("valid_"+k, None) # Not really a good style, but I'm punk like that
 		if k not in fields or not valid(fields[k]):
 			return 0
-		#del fields[k]
-	#print(fields["pid"])
 	return 1
 
 ret = 0
