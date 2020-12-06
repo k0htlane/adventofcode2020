@@ -1,3 +1,5 @@
+import numpy as np
+
 def slope(right, down):
 	col = 0
 	ret = 0
@@ -16,8 +18,4 @@ sol.append(slope(3, 1))
 sol.append(slope(5, 1))
 sol.append(slope(7, 1))
 sol.append(slope(1, 2))
-print(sol)
-x = 1
-for y in sol:
-    x *= y
-print(x)
+print(np.prod(sol))
