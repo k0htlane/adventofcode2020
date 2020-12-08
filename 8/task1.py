@@ -10,7 +10,6 @@ for line in open("input.txt"):
 acc = 0
 while not visited[ip]:
 	op, arg = code[ip]
-	# print(ip, op, arg)
 	visited[ip] = True
 	if op == "acc":
 		ip += 1
