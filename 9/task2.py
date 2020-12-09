@@ -1,16 +1,15 @@
 import numpy as np
 preamble = []
 target = 530627549
-# target= 127
 
-sums = [0]
+sums = [0] # Array to keep track of cumulative sum. Looking back I think this
+           # just makes everything slighly more complicated, with no benefit.
+           # But whatever, difficult to thing straight in the morning  ¯\_(ツ)_/¯
 nums = []
 for i,line in enumerate(open("input.txt")):
 	line = int(line.strip())
 	nums.append(line)
 	sums.append(sums[-1] + line)
-	# assert len(sums) == i+2
-	# print("|", nums[-1], sums[-1])
 	
 	if sums[-1] >= target:
 		found = False
