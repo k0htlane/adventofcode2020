@@ -2,21 +2,24 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
-#include <set>
 #include <chrono>
+#include <array>
 
 using namespace std;
+
+#define MAXCUPS 1000000
+#define SPLIT 10000
 
 class Cups;
 Cups *first = NULL;
 
-#define SPLIT 10000
+array<Cups*, MAXCUPS> owner;
+
 class Cups
 {
 public:
 	Cups *next;
 	vector<int> cups;
-	set<int> contains;
 	Cups(int size, int start=0):
 		next(0)
 	{
@@ -29,7 +32,7 @@ public:
 		for(int i = 0; i < size; i++)
 		{
 			cups[i] = start+i;
-			contains.insert(start+i);
+			owner[start+i] = this;
 		}
 	}
 
@@ -56,7 +59,6 @@ public:
 		while (count-- && index < cups.size())
 		{
 			ret.push_back(cups[index]);
-			contains.erase(cups[index]);
 			cups.erase(cups.begin() + index);
 		}
 		if (count != -1)
@@ -68,8 +70,9 @@ public:
 		if (cups.empty() && next)
 		{
 			cups = next->cups;
-			contains = next->contains;
 			next = next->next; // TODO delete old
+			for (auto i: cups)
+				owner[i] = this;
 		}
 		if (next && next->cups.empty())
 		{
@@ -93,9 +96,8 @@ public:
 			next = new Cups(0);
 			next->next = nextnext;
 			next->cups.insert(next->cups.begin(), cups.begin()+index, cups.end());
-			next->contains.insert(cups.begin()+index, cups.end());
 			for (auto v: next->cups)
-				contains.erase(v);
+				owner[v] = next;
 			cups.resize(index);
 			assert(index == cups.size());
 			next->place(0, values);
@@ -103,14 +105,14 @@ public:
 		else
 		{
 			cups.insert(cups.begin() + index, values.begin(), values.end());
-			contains.insert(values.begin(), values.end());
+			for (auto i: values)
+				owner[i] = this;
 		}
 	}
 
 	int index(int value)
 	{
-		// if (pos == cups.end())
-		if (contains.count(value) == 0)
+		if (this != owner[value])
 		{
 			assert(next);
 			return next->index(value) + cups.size();
@@ -135,8 +137,6 @@ bool has(vector<int> vec, int val)
 }
 
 
-#define MAXCUPS 1000000
-// #define MAXCUPS 9
 int main()
 {
 	Cups cups(MAXCUPS);
